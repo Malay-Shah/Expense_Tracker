@@ -4,11 +4,13 @@ package com.random.malay.expensetracker;
 import android.app.DatePickerDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,6 +21,9 @@ public class AddNewExpense extends ActionBarActivity {
 
     int mYear, mMonth,mDay;
     EditText date;
+    DBAdapter myDB;
+    EditText etDate, etDescription, etAmount;
+    Spinner spinnerCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +64,44 @@ public class AddNewExpense extends ActionBarActivity {
 
         // Dropdown list for Category
 
-        Spinner dropdown = (Spinner)findViewById(R.id.spinnerDropDownCategory);
+        Spinner dropdown = (Spinner)findViewById(R.id.spinnerCategory);
         String[] items = new String[]{
                 "Entertainment","Rent", "Transport", "Groceries","Travel", "Electricity", "Other"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items);
         dropdown.setAdapter(adapter);
+
+        // Initialize EditTexts
+        etDate = (EditText) findViewById(R.id.etDate);
+        etDescription = (EditText) findViewById(R.id.etDescription);
+        spinnerCategory = (Spinner) findViewById(R.id.spinnerCategory);
+        etAmount = (EditText) findViewById(R.id.etAmount);
+
+        openDB();
     }
 
+    private void openDB(){
+        myDB = new DBAdapter(this);
+        myDB.open();
+    }
+
+    public void addExpenseToDb(View view){
+        String dateIn = etDate.getText().toString();
+        String descriptionIn = etDescription.getText().toString();
+        String categoryIn = spinnerCategory.getSelectedItem().toString();
+        Integer amountIn = 0;
+        boolean check = false;
+        if(etAmount.getText().length() != 0){
+            amountIn = Integer.parseInt( etAmount.getText().toString() );
+            check = true;
+        }
+        if(!TextUtils.isEmpty(dateIn) && !TextUtils.isEmpty(descriptionIn) && !TextUtils.isEmpty(categoryIn) && check){
+            myDB.insertRow(dateIn, descriptionIn, categoryIn, amountIn);
+
+            Toast.makeText(this, "Information Added" + amountIn ,Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(this,"Fill in all information!",Toast.LENGTH_LONG).show();
+        }
+
+    }
 }
