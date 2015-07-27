@@ -24,20 +24,20 @@ public class DBAdapter {
 	public static final int COL_DATE = 1;
 	public static final int COL_DESCRIPTION = 2;
 	public static final int COL_CATEGORY = 3;
-	public static final int COL_Amount = 4;
+	public static final int COL_AMOUNT = 4;
 
 
 	public static final String DATABASE_NAME = "dbExpense";
 	public static final String DATABASE_TABLE = "tableDbExpense";
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 3;
 		
 
 	private static final String DATABASE_CREATE_SQL = 
 			"CREATE TABLE " + DATABASE_TABLE 
 			+ " (" + KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ KEY_DATE + " TEXT, "
-			+ KEY_DESCRIPTION + " TEXT"
-			+ KEY_CATEGORY + " TEXT"
+			+ KEY_DESCRIPTION + " TEXT, "
+			+ KEY_CATEGORY + " TEXT, "
 			+ KEY_AMOUNT+ " REAL"
 			+ ");";
 	

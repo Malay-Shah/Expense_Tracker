@@ -104,4 +104,5 @@ public class AddNewExpense extends ActionBarActivity {
         }
 
     }
+
 }
