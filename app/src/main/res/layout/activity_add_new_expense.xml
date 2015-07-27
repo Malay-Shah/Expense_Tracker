@@ -53,14 +53,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/spinnerDropDownCategory"
         android:layout_below="@+id/etDate"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:spinnerMode="dropdown"
-        android:dropDownWidth="200dp"
-        android:minWidth="250dp"
+        android:dropDownWidth="160dp"
+        android:minWidth="260dp"
         android:gravity="center"
         android:background="@android:drawable/btn_default"
-        />
+        android:layout_alignLeft="@+id/etDescription"
+        android:layout_alignStart="@+id/etDescription"
+        android:layout_alignRight="@+id/etAmount"
+        android:layout_alignEnd="@+id/etAmount" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -69,14 +71,32 @@
         android:ems="10"
         android:id="@+id/etDescription"
         android:hint="DESCRIPTION"
-        android:gravity="center"
-        android:width="275dp"
+        android:gravity="center_horizontal"
+        android:width="260dp"
         android:maxLines="3"
         android:layout_below="@+id/spinnerDropDownCategory"
         android:layout_alignLeft="@+id/etDate"
         android:layout_alignStart="@+id/etDate"
         android:layout_marginTop="22dp"
-        android:background="@android:drawable/btn_default"/>
+        android:background="@android:drawable/btn_default"
+        android:minLines="3"
+        android:maxLength="36"
+        android:layout_alignRight="@+id/etAmount"
+        android:layout_alignEnd="@+id/etAmount"
+        android:autoText="false"
+        android:textSize="20dp"
+        android:lineSpacingExtra="5dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Expense"
+        android:id="@+id/bCreateExpense"
+        android:layout_marginTop="58dp"
+        android:layout_below="@+id/etDescription"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:width="150dp" />
 
 
 </RelativeLayout>
