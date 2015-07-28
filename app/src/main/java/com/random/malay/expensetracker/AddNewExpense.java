@@ -98,7 +98,7 @@ public class AddNewExpense extends ActionBarActivity {
         if(!TextUtils.isEmpty(dateIn) && !TextUtils.isEmpty(descriptionIn) && !TextUtils.isEmpty(categoryIn) && check){
             myDB.insertRow(dateIn, descriptionIn, categoryIn, amountIn);
 
-            Toast.makeText(this, "Information Added" + amountIn ,Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Information Added" ,Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(this,"Fill in all information!",Toast.LENGTH_LONG).show();
         }
