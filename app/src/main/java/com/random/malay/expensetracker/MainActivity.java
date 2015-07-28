@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -82,6 +84,10 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
+    public void addAll(View view){
 
+        int total = myDB.getTotal();
+        Toast.makeText(this,"" +total,Toast.LENGTH_LONG).show();
+    }
 
 }

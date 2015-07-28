@@ -139,7 +139,16 @@ public class DBAdapter {
 			onCreate(_db);
 		}
 	}
-
+	public int getTotal() {
+		int sum=0;
+		Cursor cursor = db.rawQuery(
+				"SELECT SUM(amount) FROM " + DATABASE_TABLE, null);
+		//cursor.moveToFirst();
+		if(cursor.moveToFirst()) {
+			sum=cursor.getInt(0);
+		}
+		return sum;
+	}
 
 }
 
