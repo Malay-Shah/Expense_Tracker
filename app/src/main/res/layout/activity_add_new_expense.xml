@@ -80,11 +80,11 @@
         android:layout_marginTop="22dp"
         android:background="@android:drawable/btn_default"
         android:minLines="3"
-        android:maxLength="42"
+        android:maxLength="50"
         android:layout_alignRight="@+id/etAmount"
         android:layout_alignEnd="@+id/etAmount"
         android:autoText="false"
-        android:textSize="20dp"
+        android:textSize="18dp"
         android:lineSpacingExtra="5dp"/>
 
     <Button

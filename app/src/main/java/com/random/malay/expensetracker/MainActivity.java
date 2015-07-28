@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         openDB();
         populateListView();
-        listViewItemClick();
+        listViewItemLongClick();
 
     }
 
@@ -71,13 +71,14 @@ public class MainActivity extends ActionBarActivity {
         populateListView();
     }
 
-    private void listViewItemClick(){
+    private void listViewItemLongClick(){
         ListView myList = (ListView) findViewById(R.id.lvMainAct);
-        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        myList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 myDB.deleteRow(id);
                 populateListView();
+                return false;
             }
         });
     }

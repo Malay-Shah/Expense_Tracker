@@ -29,19 +29,24 @@ public class AddNewExpense extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expense);
-
-        // Date Selector
-
         date = (EditText) findViewById(R.id.etDate);
+
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        date.setText(day + "/" + (month + 1) + "/" + year);
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                // To show current date in the datepicker
                 Calendar mcurrentDate = Calendar.getInstance();
                 mYear = mcurrentDate.get(Calendar.YEAR);
                 mMonth = mcurrentDate.get(Calendar.MONTH);
                 mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+
 
                 DatePickerDialog mDatePicker = new DatePickerDialog(AddNewExpense.this, new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
@@ -50,7 +55,7 @@ public class AddNewExpense extends ActionBarActivity {
                         myCalendar.set(Calendar.MONTH, selectedmonth);
                         myCalendar.set(Calendar.DAY_OF_MONTH, selectedday);
                         String myFormat = "dd/MM/yy"; //Change as you need
-                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
                         date.setText(sdf.format(myCalendar.getTime()));
 
                         mDay = selectedday;
@@ -95,10 +100,11 @@ public class AddNewExpense extends ActionBarActivity {
             amountIn = Integer.parseInt( etAmount.getText().toString() );
             check = true;
         }
-        if(!TextUtils.isEmpty(dateIn) && !TextUtils.isEmpty(descriptionIn) && !TextUtils.isEmpty(categoryIn) && check){
+        if(!TextUtils.isEmpty(dateIn) && !TextUtils.isEmpty(descriptionIn) && !TextUtils.isEmpty(categoryIn) && check) {
             myDB.insertRow(dateIn, descriptionIn, categoryIn, amountIn);
-
             Toast.makeText(this, "Information Added" ,Toast.LENGTH_LONG).show();
+            etAmount.setText("");
+            etDescription.setText("");
         }else{
             Toast.makeText(this,"Fill in all information!",Toast.LENGTH_LONG).show();
         }
