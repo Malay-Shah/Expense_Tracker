@@ -68,8 +68,8 @@ public class MainActivity extends ActionBarActivity {
     }
     public void addAll(View view){
 
-        int total = myDB.getTotal();
-        Toast.makeText(this,"" +total,Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this,FilterBy.class);
+        startActivity(intent);
     }
 
 }

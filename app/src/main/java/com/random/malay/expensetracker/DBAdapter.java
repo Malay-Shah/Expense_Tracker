@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.Date;
+
 public class DBAdapter {
 
 	private static final String TAG = "DBAdapter"; //used for logging database version changes
@@ -143,11 +145,36 @@ public class DBAdapter {
 		int sum=0;
 		Cursor cursor = db.rawQuery(
 				"SELECT SUM(amount) FROM " + DATABASE_TABLE, null);
-		//cursor.moveToFirst();
 		if(cursor.moveToFirst()) {
 			sum=cursor.getInt(0);
 		}
 		return sum;
+	}
+	public int getTotal(String category){
+		int sum=0;
+		String query = "select SUM(" + KEY_AMOUNT + ") from " + DATABASE_TABLE
+				+ " where " + KEY_CATEGORY + " = ?";
+		Cursor cursor = db.rawQuery(
+				query, new String[] {category}
+		);
+		if(cursor.moveToFirst()) {
+			sum=cursor.getInt(0);
+		}
+		return sum;
+	}
+
+	public Cursor getRowsThatContain(String category){
+		String[] FROM = { // ID of the column(s) you want to get in the cursor
+				KEY_ROWID,KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT
+		};
+
+		String where = "category=?"; // the condition for the row(s) you want returned.
+
+		String[] whereArgs = new String[] { // The value of the column specified above for the rows to be included in the response
+				category
+		};
+
+		return db.query(DATABASE_TABLE, FROM, where, whereArgs, null, null, null);
 	}
 
 }

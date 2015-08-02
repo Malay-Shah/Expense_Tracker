@@ -20,6 +20,10 @@
             android:name=".AddNewExpense"
             android:label="@string/title_activity_add_new_expense" >
         </activity>
+        <activity
+            android:name=".FilterBy"
+            android:label="@string/title_activity_filter_by" >
+        </activity>
     </application>
 
 </manifest>
