@@ -89,7 +89,7 @@ public class DBAdapter {
 
 	public Cursor getAllRows() {
 		String where = null;
-		Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS, where, null, null, null, null, null);
+		Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS, where, null, null, null, KEY_ROWID+" DESC", null);
 		if (c != null) {
 			c.moveToFirst();
 		}

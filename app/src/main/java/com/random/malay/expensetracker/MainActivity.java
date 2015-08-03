@@ -25,8 +25,11 @@ public class MainActivity extends ActionBarActivity {
         listViewItemLongClick();
 
     }
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateListView();
+    }
     public void goToAddNewExpenseAct(View view){
         Intent intent = new Intent(this,AddNewExpense.class);
         startActivity(intent);
