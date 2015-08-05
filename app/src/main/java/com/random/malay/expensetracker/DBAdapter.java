@@ -182,5 +182,36 @@ public class DBAdapter {
 		return db.query(DATABASE_TABLE, FROM, where, whereArgs, null, null, null);
 	}
 
+	public Cursor getRowsFromDate(String date){
+		String[] FROM = { // ID of the column(s) you want to get in the cursor
+				KEY_ROWID,KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT, KEY_PAIDBY
+		};
+
+		String where = "date=?"; // the condition for the row(s) you want returned.
+
+		String[] whereArgs = new String[] { // The value of the column specified above for the rows to be included in the response
+				date
+		};
+
+		return db.query(DATABASE_TABLE, FROM, where, whereArgs, null, null, null);
+	}
+	public Cursor getRowsFromMonth(String month){
+		String[] FROM = { // ID of the column(s) you want to get in the cursor
+				KEY_ROWID,KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT, KEY_PAIDBY
+		};
+
+		String where = "date LIKE ?"; // the condition for the row(s) you want returned.
+
+		String[] whereArgs = new String[] { // The value of the column specified above for the rows to be included in the response
+				"__"+ month+"__"
+		};
+
+		return db.query(DATABASE_TABLE, FROM, where, whereArgs, null, null, null);
+	}
+
 }
+
+
+
+
 

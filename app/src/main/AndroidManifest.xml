@@ -24,6 +24,10 @@
             android:name=".FilterBy"
             android:label="@string/title_activity_filter_by" >
         </activity>
+        <activity
+            android:name=".ViewExpense"
+            android:label="@string/title_activity_view_expense" >
+        </activity>
     </application>
 
 </manifest>

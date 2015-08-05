@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity {
     }
     public void addAll(View view){
 
-        Intent intent = new Intent(this,FilterBy.class);
+        Intent intent = new Intent(this,ViewExpense.class);
         startActivity(intent);
     }
 
