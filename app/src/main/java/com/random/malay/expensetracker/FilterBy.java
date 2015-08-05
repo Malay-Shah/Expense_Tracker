@@ -56,10 +56,10 @@ public class FilterBy extends ActionBarActivity {
     private void populateListView(){
         Cursor cursor = myDB.getAllRows();
         String[] fromFieldNames = new String[]{
-                DBAdapter.KEY_DATE, DBAdapter.KEY_DESCRIPTION, DBAdapter.KEY_CATEGORY, DBAdapter.KEY_AMOUNT
+                DBAdapter.KEY_DATE, DBAdapter.KEY_DESCRIPTION, DBAdapter.KEY_CATEGORY, DBAdapter.KEY_AMOUNT, DBAdapter.KEY_PAIDBY
         };
         int[] toViewIDs = new int[]{
-                R.id.text_date, R.id.text_description,R.id.text_category, R.id.text_amount
+                R.id.text_date, R.id.text_description,R.id.text_category, R.id.text_amount, R.id.tvPaidBy
         };
         SimpleCursorAdapter myCursorAdapter;
         myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.row_layout, cursor, fromFieldNames, toViewIDs, 0);
@@ -70,10 +70,10 @@ public class FilterBy extends ActionBarActivity {
     public void filterBySelected(String category){
         Cursor cursor = myDB.getRowsThatContain(category);
         String[] fromFieldNames = new String[]{
-                DBAdapter.KEY_DATE, DBAdapter.KEY_DESCRIPTION, DBAdapter.KEY_CATEGORY, DBAdapter.KEY_AMOUNT
+                DBAdapter.KEY_DATE, DBAdapter.KEY_DESCRIPTION, DBAdapter.KEY_CATEGORY, DBAdapter.KEY_AMOUNT, DBAdapter.KEY_PAIDBY
         };
         int[] toViewIDs = new int[]{
-                R.id.text_date, R.id.text_description,R.id.text_category, R.id.text_amount
+                R.id.text_date, R.id.text_description,R.id.text_category, R.id.text_amount, R.id.tvPaidBy
         };
         SimpleCursorAdapter myCursorAdapter;
         myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.row_layout, cursor, fromFieldNames, toViewIDs, 0);

@@ -9,8 +9,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,12 +28,16 @@ public class AddNewExpense extends ActionBarActivity {
     DBAdapter myDB;
     EditText etDate, etDescription, etAmount;
     Spinner spinnerCategory;
+    RadioButton radCredit,radDebit, radCash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expense);
         date = (EditText) findViewById(R.id.etDate);
+        radCash = (RadioButton) findViewById(R.id.radCash);
+        radCredit = (RadioButton) findViewById(R.id.radCredit);
+        radDebit = (RadioButton) findViewById(R.id.radDebit);
 
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
@@ -97,13 +103,21 @@ public class AddNewExpense extends ActionBarActivity {
         String descriptionIn = etDescription.getText().toString();
         String categoryIn = spinnerCategory.getSelectedItem().toString();
         Integer amountIn = 0;
+        String paidBy;
+        if(radDebit.isChecked()){
+            paidBy = "Debit";
+        }else if(radCredit.isChecked()){
+            paidBy = "Credit";
+        }else{
+            paidBy = "Cash";
+        }
         boolean check = false;
         if(etAmount.getText().length() != 0){
             amountIn = Integer.parseInt( etAmount.getText().toString() );
             check = true;
         }
         if(!TextUtils.isEmpty(dateIn) && !TextUtils.isEmpty(descriptionIn) && !TextUtils.isEmpty(categoryIn) && check) {
-            myDB.insertRow(dateIn, descriptionIn, categoryIn, amountIn);
+            myDB.insertRow(dateIn, descriptionIn, categoryIn, amountIn, paidBy);
             Toast.makeText(this, "Expense Created" ,Toast.LENGTH_LONG).show();
             etAmount.setText("");
             etDescription.setText("");
@@ -120,4 +134,18 @@ public class AddNewExpense extends ActionBarActivity {
         return true;
     }
 
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        switch(view.getId()) {
+            case R.id.radCash:
+                if (checked)
+                    break;
+            case R.id.radCredit:
+                if (checked)
+                    break;
+            case R.id.radDebit:
+                if (checked)
+                    break;
+        }
+    }
 }

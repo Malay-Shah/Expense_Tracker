@@ -19,19 +19,21 @@ public class DBAdapter {
 	public static final String KEY_DESCRIPTION = "description";
 	public static final String KEY_CATEGORY = "category";
 	public static final String KEY_AMOUNT = "amount";
+	public static final String KEY_PAIDBY = "paidBy";
 	
-	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT};
+	public static final String[] ALL_KEYS = new String[] {KEY_ROWID, KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT, KEY_PAIDBY};
 
 	public static final int COL_ROWID = 0;
 	public static final int COL_DATE = 1;
 	public static final int COL_DESCRIPTION = 2;
 	public static final int COL_CATEGORY = 3;
 	public static final int COL_AMOUNT = 4;
+	public static final int COL_PAIDBY = 5;
 
 
 	public static final String DATABASE_NAME = "dbExpense";
 	public static final String DATABASE_TABLE = "tableDbExpense";
-	public static final int DATABASE_VERSION = 3;
+	public static final int DATABASE_VERSION = 4;
 		
 
 	private static final String DATABASE_CREATE_SQL = 
@@ -40,7 +42,8 @@ public class DBAdapter {
 			+ KEY_DATE + " TEXT, "
 			+ KEY_DESCRIPTION + " TEXT, "
 			+ KEY_CATEGORY + " TEXT, "
-			+ KEY_AMOUNT+ " REAL"
+			+ KEY_AMOUNT+ " REAL, "
+			+ KEY_PAIDBY + " TEXT"
 			+ ");";
 	
 	private final Context context;
@@ -62,12 +65,13 @@ public class DBAdapter {
 		myDBHelper.close();
 	}
 
-	public long insertRow(String date, String description, String category, Integer amount) {
+	public long insertRow(String date, String description, String category, Integer amount, String paidBy) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_DATE, date);
 		initialValues.put(KEY_DESCRIPTION, description);
 		initialValues.put(KEY_CATEGORY, category);
 		initialValues.put(KEY_AMOUNT, amount);
+		initialValues.put(KEY_PAIDBY, paidBy);
 		return db.insert(DATABASE_TABLE, null, initialValues);
 	}
 
@@ -106,13 +110,14 @@ public class DBAdapter {
 		return c;
 	}
 
-	public boolean updateRow(long rowId, String date, String description, String category, Integer amount) {
+	public boolean updateRow(long rowId, String date, String description, String category, Integer amount, String paidBy) {
 		String where = KEY_ROWID + "=" + rowId;
 		ContentValues newValues = new ContentValues();
 		newValues.put(KEY_DATE, date);
 		newValues.put(KEY_DESCRIPTION, description);
 		newValues.put(KEY_CATEGORY, category);
 		newValues.put(KEY_AMOUNT, amount);
+		newValues.put(KEY_PAIDBY, paidBy);
 		// Insert it into the database.
 		return db.update(DATABASE_TABLE, newValues, where, null) != 0;
 	}
@@ -165,7 +170,7 @@ public class DBAdapter {
 
 	public Cursor getRowsThatContain(String category){
 		String[] FROM = { // ID of the column(s) you want to get in the cursor
-				KEY_ROWID,KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT
+				KEY_ROWID,KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT, KEY_PAIDBY
 		};
 
 		String where = "category=?"; // the condition for the row(s) you want returned.

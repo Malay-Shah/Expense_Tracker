@@ -52,17 +52,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerCategory"
-        android:layout_below="@+id/etDate"
-        android:layout_marginTop="30dp"
         android:spinnerMode="dropdown"
         android:dropDownWidth="160dp"
         android:minWidth="260dp"
         android:gravity="center"
         android:background="@android:drawable/btn_default"
-        android:layout_alignLeft="@+id/etDescription"
-        android:layout_alignStart="@+id/etDescription"
-        android:layout_alignRight="@+id/etAmount"
-        android:layout_alignEnd="@+id/etAmount" />
+        android:layout_below="@+id/radioGroup"
+        android:layout_marginTop="25dp"
+        android:layout_alignRight="@+id/etDescription"
+        android:layout_alignEnd="@+id/etDescription"
+        android:layout_alignLeft="@+id/etDate"
+        android:layout_alignStart="@+id/etDate" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -74,30 +74,62 @@
         android:gravity="center_horizontal"
         android:width="260dp"
         android:maxLines="3"
-        android:layout_below="@+id/spinnerCategory"
-        android:layout_alignLeft="@+id/etDate"
-        android:layout_alignStart="@+id/etDate"
-        android:layout_marginTop="22dp"
         android:background="@android:drawable/btn_default"
         android:minLines="3"
         android:maxLength="50"
-        android:layout_alignRight="@+id/etAmount"
-        android:layout_alignEnd="@+id/etAmount"
         android:autoText="false"
         android:textSize="18dp"
-        android:lineSpacingExtra="5dp"/>
+        android:lineSpacingExtra="5dp"
+        android:layout_below="@+id/spinnerCategory"
+        android:layout_alignRight="@+id/etAmount"
+        android:layout_alignEnd="@+id/etAmount"
+        android:layout_marginTop="10dp"
+        android:layout_alignLeft="@+id/etDate"
+        android:layout_alignStart="@+id/etDate" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Expense"
         android:id="@+id/bCreateExpense"
-        android:layout_marginTop="58dp"
-        android:layout_below="@+id/etDescription"
-        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:width="150dp"
-        android:onClick="addExpenseToDb" />
+        android:onClick="addExpenseToDb"
+        android:layout_below="@+id/etDescription"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_marginTop="29dp" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/radioGroup"
+        android:layout_below="@+id/etDate"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp">
+
+        <RadioButton android:id="@+id/radCash"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cash "
+            android:onClick="onRadioButtonClicked"
+            android:checked="true" />
+        <RadioButton android:id="@+id/radCredit"
+            android:layout_width="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_height="wrap_content"
+            android:text="Credit "
+            android:onClick="onRadioButtonClicked"
+            android:checked="false" />
+        <RadioButton android:id="@+id/radDebit"
+            android:layout_width="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_height="wrap_content"
+            android:text="Debit"
+            android:onClick="onRadioButtonClicked"/>
+    </RadioGroup>
 
 
 </RelativeLayout>
