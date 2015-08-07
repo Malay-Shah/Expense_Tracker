@@ -182,6 +182,15 @@ public class ViewExpense extends ActionBarActivity {
     public void goToWeek(View view){
         String start = etWeekStart.getText().toString();
         String end = etWeekEnd.getText().toString();
+        String startStringDay, startStringMonth,startStringYear;
+        String endStringDay, endStringMonth,endStringYear;
+        startStringDay = convertDateToDay(start);
+        startStringMonth = convertDateToMonth(start);
+        startStringYear = convertDateToYear(start);
+        endStringDay = convertDateToDay(start);
+        endStringMonth = convertDateToMonth(start);
+        endStringYear = convertDateToYear(start);
+        Toast.makeText(this,startStringDay+"/"+startStringMonth+"/" + startStringYear, Toast.LENGTH_LONG).show();
     }
 
     public void goToDay(View view){
@@ -199,6 +208,61 @@ public class ViewExpense extends ActionBarActivity {
         ListView myList = (ListView) findViewById(R.id.lvSortBy);
         Toast.makeText(this, "done"+day, Toast.LENGTH_LONG).show();
         myList.setAdapter(myCursorAdapter);
+    }
+
+    public String convertDateToDay(String string){
+        String fString;
+        int iNum,fNum;
+        string = string.replace("/","");
+        iNum = 0;
+        try {
+            iNum = Integer.parseInt(string);
+        } catch(NumberFormatException nfe) {
+            Toast.makeText(this,"showCould not parse " + nfe, Toast.LENGTH_LONG).show();
+        }
+        fNum = iNum/10000;
+        if(fNum<=9){
+            fString = "0" + Integer.toString(fNum);
+        }else{
+            fString = Integer.toString(fNum);
+        }
+        return fString;
+    }
+    public String convertDateToMonth(String string){
+        String fString;
+        int iNum,fNum;
+        string = string.replace("/","");
+        iNum = 0;
+        try {
+            iNum = Integer.parseInt(string);
+        } catch(NumberFormatException nfe) {
+            Toast.makeText(this,"showCould not parse " + nfe, Toast.LENGTH_LONG).show();
+        }
+        fNum = (iNum/100)%100;
+        if(fNum<=9){
+            fString = "0" + Integer.toString(fNum);
+        }else{
+            fString = Integer.toString(fNum);
+        }
+        return fString;
+    }
+    public String convertDateToYear(String string){
+        String fString;
+        int iNum,fNum;
+        string = string.replace("/","");
+        iNum = 0;
+        try {
+            iNum = Integer.parseInt(string);
+        } catch(NumberFormatException nfe) {
+            Toast.makeText(this,"showCould not parse " + nfe, Toast.LENGTH_LONG).show();
+        }
+        fNum = iNum%100;
+        if(fNum<=9){
+            fString = "0" + Integer.toString(fNum);
+        }else{
+            fString = Integer.toString(fNum);
+        }
+        return fString;
     }
 
 }
