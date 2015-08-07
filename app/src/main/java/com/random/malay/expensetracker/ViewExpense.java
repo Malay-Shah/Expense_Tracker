@@ -187,10 +187,11 @@ public class ViewExpense extends ActionBarActivity {
         startStringDay = convertDateToDay(start);
         startStringMonth = convertDateToMonth(start);
         startStringYear = convertDateToYear(start);
-        endStringDay = convertDateToDay(start);
-        endStringMonth = convertDateToMonth(start);
-        endStringYear = convertDateToYear(start);
-        Toast.makeText(this,startStringDay+"/"+startStringMonth+"/" + startStringYear, Toast.LENGTH_LONG).show();
+        endStringDay = convertDateToDay(end);
+        endStringMonth = convertDateToMonth(end);
+        endStringYear = convertDateToYear(end);
+        boolean checkStartIsGreaterThanEnd = checkDate(startStringDay,startStringMonth,startStringYear,endStringDay,endStringMonth,endStringYear);
+        Toast.makeText(this,"The condition is " + checkStartIsGreaterThanEnd, Toast.LENGTH_LONG).show();
     }
 
     public void goToDay(View view){
@@ -218,7 +219,7 @@ public class ViewExpense extends ActionBarActivity {
         try {
             iNum = Integer.parseInt(string);
         } catch(NumberFormatException nfe) {
-            Toast.makeText(this,"showCould not parse " + nfe, Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"showCould not parse " + nfe, Toast.LENGTH_SHORT).show();
         }
         fNum = iNum/10000;
         if(fNum<=9){
@@ -263,6 +264,21 @@ public class ViewExpense extends ActionBarActivity {
             fString = Integer.toString(fNum);
         }
         return fString;
+    }
+
+    public boolean checkDate(String sDay, String sMonth, String sYear, String eDay, String eMonth, String eYear){
+        int sD,sM,sY,eD,eM,eY;
+        sD = Integer.parseInt(sDay);
+        sM = Integer.parseInt(sMonth);
+        sY = Integer.parseInt(sYear);
+        eD = Integer.parseInt(eDay);
+        eM = Integer.parseInt(eMonth);
+        eY = Integer.parseInt(eYear);
+        boolean check = false;
+        if(sY<=eY && sM<=eM && sD<=eD) {
+            check = true;
+        }
+        return check;
     }
 
 }
