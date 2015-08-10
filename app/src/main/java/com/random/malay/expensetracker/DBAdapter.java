@@ -155,18 +155,7 @@ public class DBAdapter {
 		}
 		return sum;
 	}
-	public int getTotal(String category){
-		int sum=0;
-		String query = "select SUM(" + KEY_AMOUNT + ") from " + DATABASE_TABLE
-				+ " where " + KEY_CATEGORY + " = ?";
-		Cursor cursor = db.rawQuery(
-				query, new String[] {category}
-		);
-		if(cursor.moveToFirst()) {
-			sum=cursor.getInt(0);
-		}
-		return sum;
-	}
+
 
 	public Cursor getRowsThatContain(String category){
 		String[] FROM = { // ID of the column(s) you want to get in the cursor
@@ -182,31 +171,95 @@ public class DBAdapter {
 		return db.query(DATABASE_TABLE, FROM, where, whereArgs, null, null, null);
 	}
 
-	public Cursor getRowsFromDate(String date){
+	public Cursor getRowsFromDate(String date, String cash, String credit, String debit){
 		String[] FROM = { // ID of the column(s) you want to get in the cursor
 				KEY_ROWID,KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT, KEY_PAIDBY
 		};
 
-		String where = "date=?"; // the condition for the row(s) you want returned.
+		String where = "date=? AND (paidBy = ? OR paidBy = ? OR paidBy = ?)"; // the condition for the row(s) you want returned.
 
 		String[] whereArgs = new String[] { // The value of the column specified above for the rows to be included in the response
-				date
+				date , cash, credit, debit
 		};
 
 		return db.query(DATABASE_TABLE, FROM, where, whereArgs, null, null, null);
 	}
-	public Cursor getRowsFromMonth(String month){
+	public Cursor getRowsFromMonth(String month, String cash, String credit, String debit){
 		String[] FROM = { // ID of the column(s) you want to get in the cursor
 				KEY_ROWID,KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT, KEY_PAIDBY
 		};
 
-		String where = "date LIKE ?"; // the condition for the row(s) you want returned.
+		String where = "date LIKE ? AND (paidBy = ? OR paidBy = ? OR paidBy = ?)" ;
 
-		String[] whereArgs = new String[] { // The value of the column specified above for the rows to be included in the response
-				"__"+ month+"__"
+		String[] whereArgs = new String[] {
+				"__"+ month+"__" , cash,credit,debit
 		};
 
 		return db.query(DATABASE_TABLE, FROM, where, whereArgs, null, null, null);
+	}
+	public Cursor getRowsFromPayment(String cash, String credit, String debit){
+		String[] FROM = { // ID of the column(s) you want to get in the cursor
+				KEY_ROWID,KEY_DATE, KEY_DESCRIPTION, KEY_CATEGORY, KEY_AMOUNT, KEY_PAIDBY
+		};
+
+		String where = "paidBy = ? OR paidBy = ? OR paidBy = ?" ;
+
+		String[] whereArgs = new String[] {
+				cash,credit,debit
+		};
+
+		return db.query(DATABASE_TABLE, FROM, where, whereArgs, null, null, null);
+	}
+
+	public int getTotal(String category){
+		int sum=0;
+		String query = "select SUM(" + KEY_AMOUNT + ") from " + DATABASE_TABLE
+				+ " where " + KEY_CATEGORY + " = ?";
+		Cursor cursor = db.rawQuery(
+				query, new String[] {category}
+		);
+		if(cursor.moveToFirst()) {
+			sum=cursor.getInt(0);
+		}
+		return sum;
+	}
+
+	public int getTotalMonth(String month, String cash, String credit, String debit){
+		int sum=0;
+		String query = "select SUM(" + KEY_AMOUNT + ") from " + DATABASE_TABLE
+				+ " where date LIKE ? AND (paidBy = ? OR paidBy = ? OR paidBy = ?)";
+		Cursor cursor = db.rawQuery(
+				query, new String[] {"__"+ month+"__" ,cash,credit,debit}
+		);
+		if(cursor.moveToFirst()) {
+			sum=cursor.getInt(0);
+		}
+		return sum;
+	}
+
+	public int getTotalDate(String date, String cash, String credit, String debit){
+		int sum=0;
+		String query = "select SUM(" + KEY_AMOUNT + ") from " + DATABASE_TABLE
+				+ " where date = ? AND (paidBy = ? OR paidBy = ? OR paidBy = ?)";
+		Cursor cursor = db.rawQuery(
+				query, new String[] {date, cash,credit,debit}
+		);
+		if(cursor.moveToFirst()) {
+			sum=cursor.getInt(0);
+		}
+		return sum;
+	}
+	public int getTotal(String cash, String credit, String debit){
+		int sum=0;
+		String query = "select SUM(" + KEY_AMOUNT + ") from " + DATABASE_TABLE
+				+ " where paidBy = ? OR paidBy = ? OR paidBy = ?";
+		Cursor cursor = db.rawQuery(
+				query, new String[] {cash,credit,debit}
+		);
+		if(cursor.moveToFirst()) {
+			sum=cursor.getInt(0);
+		}
+		return sum;
 	}
 
 }

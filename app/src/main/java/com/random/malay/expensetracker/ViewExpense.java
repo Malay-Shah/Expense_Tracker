@@ -8,12 +8,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -24,82 +28,30 @@ import java.util.Locale;
 public class ViewExpense extends ActionBarActivity {
 
     EditText etWeekStart, etWeekEnd, etDay;
+    TextView tvTotal;
     int mYear, mMonth,mDay;
     Spinner dropdown;
     DBAdapter myDB;
+    CheckBox cbCash, cbCredit, cbDebit;
+    int recentClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_expense);
+        cbCash = (CheckBox) findViewById(R.id.cbCash);
+        cbCredit = (CheckBox) findViewById(R.id.cbCredit);
+        cbDebit = (CheckBox) findViewById(R.id.cbDebit);
         dropdown = (Spinner)findViewById(R.id.spinnerMonth);
+        tvTotal = (TextView) findViewById(R.id.tvTotal);
         String[] items = new String[]{
                 "January","February","March","April","May","June","July","August","September","October","November","December"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items);
         dropdown.setAdapter(adapter);
-        etWeekStart = (EditText) findViewById(R.id.etWeekFilterStart);
-        etWeekEnd = (EditText) findViewById(R.id.etWeekFilterEnd);
         etDay = (EditText) findViewById(R.id.etSortDay);
 
-        etWeekStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Calendar mcurrentDate = Calendar.getInstance();
-                mYear = mcurrentDate.get(Calendar.YEAR);
-                mMonth = mcurrentDate.get(Calendar.MONTH);
-                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
 
-
-
-                DatePickerDialog mDatePicker = new DatePickerDialog(ViewExpense.this, new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        Calendar myCalendar = Calendar.getInstance();
-                        myCalendar.set(Calendar.YEAR, selectedyear);
-                        myCalendar.set(Calendar.MONTH, selectedmonth);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, selectedday);
-                        String myFormat = "dd/MM/yy"; //Change as you need
-                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
-                        etWeekStart.setText(sdf.format(myCalendar.getTime()));
-
-                        mDay = selectedday;
-                        mMonth = selectedmonth;
-                        mYear = selectedyear;
-                    }
-                }, mYear, mMonth, mDay);
-                mDatePicker.show();
-            }
-        });
-        etWeekEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Calendar mcurrentDate = Calendar.getInstance();
-                mYear = mcurrentDate.get(Calendar.YEAR);
-                mMonth = mcurrentDate.get(Calendar.MONTH);
-                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
-
-
-
-                DatePickerDialog mDatePicker = new DatePickerDialog(ViewExpense.this, new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                        Calendar myCalendar = Calendar.getInstance();
-                        myCalendar.set(Calendar.YEAR, selectedyear);
-                        myCalendar.set(Calendar.MONTH, selectedmonth);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, selectedday);
-                        String myFormat = "dd/MM/yy"; //Change as you need
-                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
-                        etWeekEnd.setText(sdf.format(myCalendar.getTime()));
-
-                        mDay = selectedday;
-                        mMonth = selectedmonth;
-                        mYear = selectedyear;
-                    }
-                }, mYear, mMonth, mDay);
-                mDatePicker.show();
-            }
-        });
         etDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,7 +69,7 @@ public class ViewExpense extends ActionBarActivity {
                         myCalendar.set(Calendar.YEAR, selectedyear);
                         myCalendar.set(Calendar.MONTH, selectedmonth);
                         myCalendar.set(Calendar.DAY_OF_MONTH, selectedday);
-                        String myFormat = "dd/MM/yy"; //Change as you need
+                        String myFormat = "dd/MM/yy";
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
                         etDay.setText(sdf.format(myCalendar.getTime()));
 
@@ -130,6 +82,7 @@ public class ViewExpense extends ActionBarActivity {
             }
         });
         openDB();
+        listViewItemLongClick();
     }
     private void openDB(){
         myDB = new DBAdapter(this);
@@ -166,7 +119,18 @@ public class ViewExpense extends ActionBarActivity {
         }else{
             monthNum="/00/";
         }
-        Cursor cursor = myDB.getRowsFromMonth(monthNum);
+        String cash = "",credit = "",debit = "";
+        if(cbCash.isChecked()){
+            cash = "Cash";
+        }
+        if(cbCredit.isChecked()){
+            credit = "Credit";
+        }
+        if(cbDebit.isChecked()){
+            debit = "Debit";
+        }
+
+        Cursor cursor = myDB.getRowsFromMonth(monthNum,cash,credit,debit);
         String[] fromFieldNames = new String[]{
                 DBAdapter.KEY_DATE, DBAdapter.KEY_DESCRIPTION, DBAdapter.KEY_CATEGORY, DBAdapter.KEY_AMOUNT, DBAdapter.KEY_PAIDBY
         };
@@ -177,26 +141,24 @@ public class ViewExpense extends ActionBarActivity {
         myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.row_layout, cursor, fromFieldNames, toViewIDs, 0);
         ListView myList = (ListView) findViewById(R.id.lvSortBy);
         myList.setAdapter(myCursorAdapter);
-    }
-
-    public void goToWeek(View view){
-        String start = etWeekStart.getText().toString();
-        String end = etWeekEnd.getText().toString();
-        String startStringDay, startStringMonth,startStringYear;
-        String endStringDay, endStringMonth,endStringYear;
-        startStringDay = convertDateToDay(start);
-        startStringMonth = convertDateToMonth(start);
-        startStringYear = convertDateToYear(start);
-        endStringDay = convertDateToDay(end);
-        endStringMonth = convertDateToMonth(end);
-        endStringYear = convertDateToYear(end);
-        boolean checkStartIsGreaterThanEnd = checkDate(startStringDay,startStringMonth,startStringYear,endStringDay,endStringMonth,endStringYear);
-        Toast.makeText(this,"The condition is " + checkStartIsGreaterThanEnd, Toast.LENGTH_LONG).show();
+        recentClicked=0;
+        int total = myDB.getTotalMonth(month, cash, credit, debit);
+        tvTotal.setText("Total = " + total);
     }
 
     public void goToDay(View view){
+        String cash = "",credit = "",debit = "";
+        if(cbCash.isChecked()){
+            cash = "Cash";
+        }
+        if(cbCredit.isChecked()){
+            credit = "Credit";
+        }
+        if(cbDebit.isChecked()){
+            debit = "Debit";
+        }
         String day = etDay.getText().toString();
-        Cursor cursor = myDB.getRowsFromDate(day);
+        Cursor cursor = myDB.getRowsFromDate(day, cash, credit, debit);
 
         String[] fromFieldNames = new String[]{
                 DBAdapter.KEY_DATE, DBAdapter.KEY_DESCRIPTION, DBAdapter.KEY_CATEGORY, DBAdapter.KEY_AMOUNT, DBAdapter.KEY_PAIDBY
@@ -207,78 +169,59 @@ public class ViewExpense extends ActionBarActivity {
         SimpleCursorAdapter myCursorAdapter;
         myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.row_layout, cursor, fromFieldNames, toViewIDs, 0);
         ListView myList = (ListView) findViewById(R.id.lvSortBy);
-        Toast.makeText(this, "done"+day, Toast.LENGTH_LONG).show();
         myList.setAdapter(myCursorAdapter);
+        recentClicked=1;
+        int total = myDB.getTotalDate(day, cash, debit, credit);
+        tvTotal.setText("Total = " + total);
     }
 
-    public String convertDateToDay(String string){
-        String fString;
-        int iNum,fNum;
-        string = string.replace("/","");
-        iNum = 0;
-        try {
-            iNum = Integer.parseInt(string);
-        } catch(NumberFormatException nfe) {
-            Toast.makeText(this,"showCould not parse " + nfe, Toast.LENGTH_SHORT).show();
+    public void bGoToPayment(View view){
+        String cash = "",credit = "",debit = "";
+        if(cbCash.isChecked()){
+            cash = "Cash";
         }
-        fNum = iNum/10000;
-        if(fNum<=9){
-            fString = "0" + Integer.toString(fNum);
-        }else{
-            fString = Integer.toString(fNum);
+        if(cbCredit.isChecked()){
+            credit = "Credit";
         }
-        return fString;
-    }
-    public String convertDateToMonth(String string){
-        String fString;
-        int iNum,fNum;
-        string = string.replace("/","");
-        iNum = 0;
-        try {
-            iNum = Integer.parseInt(string);
-        } catch(NumberFormatException nfe) {
-            Toast.makeText(this,"showCould not parse " + nfe, Toast.LENGTH_LONG).show();
+        if(cbDebit.isChecked()){
+            debit = "Debit";
         }
-        fNum = (iNum/100)%100;
-        if(fNum<=9){
-            fString = "0" + Integer.toString(fNum);
-        }else{
-            fString = Integer.toString(fNum);
-        }
-        return fString;
-    }
-    public String convertDateToYear(String string){
-        String fString;
-        int iNum,fNum;
-        string = string.replace("/","");
-        iNum = 0;
-        try {
-            iNum = Integer.parseInt(string);
-        } catch(NumberFormatException nfe) {
-            Toast.makeText(this,"showCould not parse " + nfe, Toast.LENGTH_LONG).show();
-        }
-        fNum = iNum%100;
-        if(fNum<=9){
-            fString = "0" + Integer.toString(fNum);
-        }else{
-            fString = Integer.toString(fNum);
-        }
-        return fString;
+        String day = etDay.getText().toString();
+        Cursor cursor = myDB.getRowsFromPayment(cash, credit, debit);
+
+        String[] fromFieldNames = new String[]{
+                DBAdapter.KEY_DATE, DBAdapter.KEY_DESCRIPTION, DBAdapter.KEY_CATEGORY, DBAdapter.KEY_AMOUNT, DBAdapter.KEY_PAIDBY
+        };
+        int[] toViewIDs = new int[]{
+                R.id.text_date, R.id.text_description,R.id.text_category, R.id.text_amount, R.id.tvPaidBy
+        };
+        SimpleCursorAdapter myCursorAdapter;
+        myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.row_layout, cursor, fromFieldNames, toViewIDs, 0);
+        ListView myList = (ListView) findViewById(R.id.lvSortBy);
+        myList.setAdapter(myCursorAdapter);
+        recentClicked=2;
+        int total = myDB.getTotal(cash,credit,debit);
+        tvTotal.setText("Total = " + total);
     }
 
-    public boolean checkDate(String sDay, String sMonth, String sYear, String eDay, String eMonth, String eYear){
-        int sD,sM,sY,eD,eM,eY;
-        sD = Integer.parseInt(sDay);
-        sM = Integer.parseInt(sMonth);
-        sY = Integer.parseInt(sYear);
-        eD = Integer.parseInt(eDay);
-        eM = Integer.parseInt(eMonth);
-        eY = Integer.parseInt(eYear);
-        boolean check = false;
-        if(sY<=eY && sM<=eM && sD<=eD) {
-            check = true;
-        }
-        return check;
+    private void listViewItemLongClick(){
+        ListView myList = (ListView) findViewById(R.id.lvSortBy);
+        myList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                myDB.deleteRow(id);
+                if(recentClicked==0){
+                    Button button1 = (Button) findViewById(R.id.bGoMonth);
+                    button1.performClick();
+                }else if(recentClicked == 1){
+                    Button button1 = (Button) findViewById(R.id.bGoDay);
+                    button1.performClick();
+                }else{
+                    Button button1 = (Button) findViewById(R.id.bGoPayment);
+                    button1.performClick();
+                }
+                return false;
+            }
+        });
     }
-
 }
