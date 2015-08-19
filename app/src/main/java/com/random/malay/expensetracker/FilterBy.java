@@ -20,12 +20,12 @@ public class FilterBy extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_by);
-        Spinner dropdown = (Spinner)findViewById(R.id.spinnerFilter);
-        String[] items = new String[]{
+        Spinner dropdown1 = (Spinner)findViewById(R.id.spinnerFilter);
+        String[] items1 = new String[]{
                 "Entertainment","Rent", "Transport", "Groceries","Travel", "Electricity", "Other"
         };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, items);
-        dropdown.setAdapter(adapter);
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, R.layout.spinner_item, items1);
+        dropdown1.setAdapter(adapter1);
         openDB();
         populateListView();
         displayTotal = (TextView) findViewById(R.id.displayTotal);

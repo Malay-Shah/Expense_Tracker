@@ -81,12 +81,52 @@ public class ViewExpense extends ActionBarActivity {
                 mDatePicker.show();
             }
         });
+
+        Spinner dropdown1 = (Spinner)findViewById(R.id.spinnerCat);
+        String[] items1 = new String[]{
+                "Entertainment","Rent", "Transport", "Groceries","Travel", "Electricity", "Other"
+        };
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, R.layout.spinner_item, items1);
+        dropdown1.setAdapter(adapter1);
+        openDB();
+
+        final Spinner spinner = (Spinner) findViewById(R.id.spinnerCat);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selected = spinner.getSelectedItem().toString();
+                filterBySelected(selected);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+
         openDB();
         listViewItemLongClick();
     }
     private void openDB(){
         myDB = new DBAdapter(this);
         myDB.open();
+    }
+
+    public void filterBySelected(String category){
+        Cursor cursor = myDB.getRowsThatContain(category);
+        String[] fromFieldNames = new String[]{
+                DBAdapter.KEY_DATE, DBAdapter.KEY_DESCRIPTION, DBAdapter.KEY_CATEGORY, DBAdapter.KEY_AMOUNT, DBAdapter.KEY_PAIDBY
+        };
+        int[] toViewIDs = new int[]{
+                R.id.text_date, R.id.text_description,R.id.text_category, R.id.text_amount, R.id.tvPaidBy
+        };
+        SimpleCursorAdapter myCursorAdapter;
+        myCursorAdapter = new SimpleCursorAdapter(getBaseContext(), R.layout.row_layout, cursor, fromFieldNames, toViewIDs, 0);
+        ListView myList = (ListView) findViewById(R.id.lvSortBy);
+        myList.setAdapter(myCursorAdapter);
+        int total = myDB.getTotal(category);
+        tvTotal.setText("Total = $" + total);
     }
 
     public void goToMonth(View view){
@@ -142,8 +182,8 @@ public class ViewExpense extends ActionBarActivity {
         ListView myList = (ListView) findViewById(R.id.lvSortBy);
         myList.setAdapter(myCursorAdapter);
         recentClicked=0;
-        int total = myDB.getTotalMonth(month, cash, credit, debit);
-        tvTotal.setText("Total = $ " + total);
+        int total = myDB.getTotalMonth(monthNum, cash, credit, debit);
+        tvTotal.setText("Total = $" + total);
     }
 
     public void goToDay(View view){
@@ -172,7 +212,7 @@ public class ViewExpense extends ActionBarActivity {
         myList.setAdapter(myCursorAdapter);
         recentClicked=1;
         int total = myDB.getTotalDate(day, cash, debit, credit);
-        tvTotal.setText("Total = $ " + total);
+        tvTotal.setText("Total = $" + total);
     }
 
     public void bGoToPayment(View view){
@@ -201,7 +241,7 @@ public class ViewExpense extends ActionBarActivity {
         myList.setAdapter(myCursorAdapter);
         recentClicked=2;
         int total = myDB.getTotal(cash,credit,debit);
-        tvTotal.setText("Total = $ " + total);
+        tvTotal.setText("Total = $" + total);
     }
 
     private void listViewItemLongClick(){

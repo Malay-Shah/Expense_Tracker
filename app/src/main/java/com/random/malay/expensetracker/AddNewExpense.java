@@ -39,6 +39,7 @@ public class AddNewExpense extends ActionBarActivity {
         radCredit = (RadioButton) findViewById(R.id.radCredit);
         radDebit = (RadioButton) findViewById(R.id.radDebit);
 
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
