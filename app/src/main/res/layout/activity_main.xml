@@ -13,7 +13,7 @@
         android:id="@+id/tvTitleForMainAct"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="10dp" />
 
     <ImageView
         android:layout_width="40dp"
@@ -54,7 +54,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TOTAL"
+        android:text="SORT"
         android:id="@+id/button"
         android:layout_above="@+id/lvMainAct"
         android:layout_centerHorizontal="true"

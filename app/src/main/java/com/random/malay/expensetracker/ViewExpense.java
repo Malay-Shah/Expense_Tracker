@@ -143,7 +143,7 @@ public class ViewExpense extends ActionBarActivity {
         myList.setAdapter(myCursorAdapter);
         recentClicked=0;
         int total = myDB.getTotalMonth(month, cash, credit, debit);
-        tvTotal.setText("Total = " + total);
+        tvTotal.setText("Total = $ " + total);
     }
 
     public void goToDay(View view){
@@ -172,7 +172,7 @@ public class ViewExpense extends ActionBarActivity {
         myList.setAdapter(myCursorAdapter);
         recentClicked=1;
         int total = myDB.getTotalDate(day, cash, debit, credit);
-        tvTotal.setText("Total = " + total);
+        tvTotal.setText("Total = $ " + total);
     }
 
     public void bGoToPayment(View view){
@@ -201,7 +201,7 @@ public class ViewExpense extends ActionBarActivity {
         myList.setAdapter(myCursorAdapter);
         recentClicked=2;
         int total = myDB.getTotal(cash,credit,debit);
-        tvTotal.setText("Total = " + total);
+        tvTotal.setText("Total = $ " + total);
     }
 
     private void listViewItemLongClick(){

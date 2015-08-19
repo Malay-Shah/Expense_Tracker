@@ -112,11 +112,11 @@ public class AddNewExpense extends ActionBarActivity {
         }
         if(!TextUtils.isEmpty(dateIn) && !TextUtils.isEmpty(descriptionIn) && !TextUtils.isEmpty(categoryIn) && check) {
             myDB.insertRow(dateIn, descriptionIn, categoryIn, amountIn, paidBy);
-            Toast.makeText(this, "Expense Created" ,Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Expense Created" ,Toast.LENGTH_SHORT).show();
             etAmount.setText("");
             etDescription.setText("");
         }else{
-            Toast.makeText(this,"Fill in all information!",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Fill in all information!",Toast.LENGTH_SHORT).show();
         }
 
     }
