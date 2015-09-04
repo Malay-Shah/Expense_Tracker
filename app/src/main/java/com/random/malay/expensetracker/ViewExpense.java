@@ -4,9 +4,6 @@ import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,7 +24,7 @@ import java.util.Locale;
 
 public class ViewExpense extends ActionBarActivity {
 
-    EditText etWeekStart, etWeekEnd, etDay;
+    EditText etDay;
     TextView tvTotal;
     int mYear, mMonth,mDay;
     Spinner dropdown;
